@@ -5,20 +5,15 @@ import {DataService} from "./data-service.service";
 import {BehaviorSubject, delay, Observable, Subject} from "rxjs";
 import {AsyncPipe, CommonModule} from "@angular/common";
 import {Component, inject} from "@angular/core";
+import {
+	DeclarativeComponent
+} from "./declarative-component/declarative.component";
 
 @Component({
 	selector: 'app-root',
-	standalone: true, imports: [ImperativeComponentComponent, CommonModule],
-	template: `
-      <h2>
-          <button (click)="toggleUserType()">Toggle</button>
-          Current User: {{dataService.mockIsAdmin ? 'Admin' : 'Normal user'}}
-      </h2>
-
-      <ng-container *ngIf="showComponents$ | async">
-          <app-imperative-component></app-imperative-component>
-      </ng-container>
-  `,
+	standalone: true,
+	imports: [ImperativeComponentComponent, CommonModule, DeclarativeComponent],
+	templateUrl: 'app.component.html',
 })
 export class AppComponent {
 	name = 'Angular';

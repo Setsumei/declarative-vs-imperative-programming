@@ -1,1 +1,21 @@
-/* Add application styles & imports to this file! */
+.yellow-box{
+    background: lightyellow;
+    padding: 1rem 2rem;
+}
+
+.red-box{
+    background: indianred;
+    padding: 1rem 2rem;
+    width: 20rem;
+}
+
+.blue-box{
+    background: lightskyblue;
+    padding: 1rem 2rem;
+    width: 20rem;
+}
+
+.flex{
+    display: flex;
+    gap: 10rem;
+}

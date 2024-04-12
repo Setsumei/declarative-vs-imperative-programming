@@ -3,12 +3,12 @@ import {DataService, Todo, User} from "../data-service.service";
 import {firstValueFrom} from "rxjs";
 
 @Component({
-  selector: 'app-imperative-impl',
+  selector: 'app-declarative-impl',
   standalone: true,
   imports: [],
-  templateUrl: './imperative-component.component.html',
+  templateUrl: './declarative.component.html',
 })
-export class ImperativeComponentComponent {
+export class DeclarativeComponent {
 	public dataService: DataService = inject(DataService);
 	public todos: WritableSignal<Array<Todo>> = signal([]);
 	public isAdmin: WritableSignal<boolean> = signal(false);

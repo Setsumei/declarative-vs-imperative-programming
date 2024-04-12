@@ -1,0 +1,12 @@
+<div class="yellow-box"><h2>
+    <button (click)="toggleUserType()">Toggle</button>
+    Current User: {{dataService.mockIsAdmin ? 'Admin' : 'Normal user'}}
+</h2>
+</div>
+
+<ng-container *ngIf="showComponents$ | async">
+    <div class="flex">
+        <app-imperative-impl></app-imperative-impl>
+        <app-declarative-impl></app-declarative-impl>
+    </div>
+</ng-container>
