@@ -4,20 +4,27 @@ import { Observable, delay, of } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class SnakeGameService {
+export class DataService {
+	public mockIsAdmin: boolean = true;
+
   public getUserData$(): Observable<User> {
-    return Math.random() > 0.5
+    return this.mockIsAdmin
       ? of({
           name: 'admin',
           isAdmin: true,
-        }).pipe(delay(500))
+        }).pipe(delay(200))
       : of({
           name: 'user',
           isAdmin: false,
-        }).pipe(delay(500));
+        }).pipe(delay(200));
   }
 
-  public getData$(filter: string): Observable<Array<Todo>> {
+  public getData$(filter?: string): Observable<Array<Todo>> {
+
+	  if(this.mockIsAdmin && !filter){
+		  throw Error('no filter!');
+	  }
+
     return of([
       {
         userId: 1,
@@ -62,7 +69,7 @@ export class SnakeGameService {
         title: 'illo expedita consequatur quia in',
         completed: false,
       },
-    ]).pipe(delay(1000));
+    ]).pipe(delay(400));
   }
 }
 

@@ -1,0 +1,19 @@
+<h2>Imperative Component:</h2>
+
+@if (isAdmin()) {
+<div><input type="text" #filterInput (keydown.enter)="updateTextFilter(filterInput.value)">
+</div>
+<div>
+    current Filter: {{textFilter() ?? 'kein Filter'}}
+</div>
+<br>
+}
+
+<h3>Todos:</h3>
+<div>
+    @for (todo of todos(); track todo.id) {
+    <li>{{ todo.title }}</li>
+    } @empty {
+    please input filter
+    }
+</div>
