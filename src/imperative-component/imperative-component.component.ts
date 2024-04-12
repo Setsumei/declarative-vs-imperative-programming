@@ -22,7 +22,6 @@ export class ImperativeComponentComponent {
 				}
 			}
 		)
-
 		this.fetchData();
 	}
 
@@ -33,7 +32,6 @@ export class ImperativeComponentComponent {
 
 	public async fetchData(): Promise<void>{
 		let todos;
-
 		if(this.isAdmin()){
 			if(this.textFilter){
 				todos = await firstValueFrom(this.dataService.getData$(this.textFilter()));
@@ -43,10 +41,7 @@ export class ImperativeComponentComponent {
 		}else{
 			todos = await firstValueFrom(this.dataService.getData$());
 		}
-
 		this.todos.set(todos??[]);
-
-
 	}
 
 

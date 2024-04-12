@@ -1,54 +1,29 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
-import {DataService, Todo, User} from "../data-service.service";
-import {firstValueFrom} from "rxjs";
+import {Component, inject, Signal, signal, WritableSignal} from '@angular/core';
+import {DataService, Todo} from "../data-service.service";
+import {Observable, Subject, switchMap, tap} from "rxjs";
+import {toObservable, toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
-  selector: 'app-declarative-impl',
-  standalone: true,
-  imports: [],
-  templateUrl: './declarative.component.html',
+	selector: 'app-declarative-impl',
+	standalone: true,
+	imports: [],
+	templateUrl: './declarative.component.html',
 })
 export class DeclarativeComponent {
 	public dataService: DataService = inject(DataService);
-	public todos: WritableSignal<Array<Todo>> = signal([]);
-	public isAdmin: WritableSignal<boolean> = signal(false);
-	public textFilter: WritableSignal<string> = signal('');
+	public _textFilter$: Subject<string> = new Subject<string>();
+	public textFilter: Signal<string | undefined> = toSignal(this._textFilter$);
 
-	constructor() {
-		this.dataService.getUserData$().subscribe(
-			user => {
-				if(user.isAdmin){
-					this.isAdmin.set(true);
-				}
-			}
+	public todos: Signal<Array<Todo> | undefined> = toSignal(
+		this.dataService.getUserData$().pipe(
+			switchMap((user) =>
+				user.isAdmin ?
+					this._textFilter$.pipe(switchMap(textFilter => this.dataService.getData$(textFilter)))
+					: this.dataService.getData$())
 		)
+	);
 
-		this.fetchData();
+	public updateTextFilter(textFilter: string): void {
+		this._textFilter$.next(textFilter);
 	}
-
-	public updateTextFilter(textFilter: string): void{
-		this.textFilter.set(textFilter);
-		this.fetchData();
-	}
-
-	public async fetchData(): Promise<void>{
-		let todos;
-
-		if(this.isAdmin()){
-			if(this.textFilter){
-				todos = await firstValueFrom(this.dataService.getData$(this.textFilter()));
-			}else{
-				// optional throw error
-			}
-		}else{
-			todos = await firstValueFrom(this.dataService.getData$());
-		}
-
-		this.todos.set(todos??[]);
-
-
-	}
-
-
-
 }

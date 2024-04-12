@@ -69,7 +69,9 @@ export class DataService {
         title: 'illo expedita consequatur quia in',
         completed: false,
       },
-    ]).pipe(delay(400));
+    ].filter(
+		(item) => !filter || Math.random() > 0.5
+	)).pipe(delay(400));
   }
 }
 
