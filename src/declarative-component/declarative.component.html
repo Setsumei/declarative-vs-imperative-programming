@@ -1,7 +1,7 @@
 <div class="blue-box">
     <h2>Declarative Component:</h2>
 
-    @if (true) {
+    @if (isAdmin()) {
     <div><input type="text" #filterInput (keydown.enter)="updateTextFilter(filterInput.value)">
     </div>
     <div>
@@ -10,10 +10,10 @@
     <br>
     }
 
-    <h3>Todos:</h3>
+    <h3>Items::</h3>
     <div>
-        @for (todo of todos(); track todo.id) {
-        <li>{{ todo.title }}</li>
+        @for (item of items(); track item.id) {
+        <li>{{ item.title }}</li>
         } @empty {
         please input filter
         }

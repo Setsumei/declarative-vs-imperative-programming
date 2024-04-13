@@ -19,7 +19,7 @@ export class DataService {
         }).pipe(delay(200));
   }
 
-  public getData$(filter?: string): Observable<Array<Todo>> {
+  public getData$(filter?: string): Observable<Array<Item>> {
 
 	  if(this.mockIsAdmin && !filter){
 		  throw Error('no filter!');
@@ -80,7 +80,7 @@ export interface User {
   isAdmin: boolean;
 }
 
-export interface Todo {
+export interface Item {
   userId: number;
   id: number;
   title: string;

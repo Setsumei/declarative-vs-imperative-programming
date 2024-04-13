@@ -1,49 +1,51 @@
 import {Component, inject, signal, WritableSignal} from '@angular/core';
-import {DataService, Todo, User} from "../data-service.service";
-import {firstValueFrom} from "rxjs";
+import {DataService, Item} from "../data-service.service";
 
 @Component({
-  selector: 'app-imperative-impl',
-  standalone: true,
-  imports: [],
-  templateUrl: './imperative-component.component.html',
+	selector: 'app-imperative-impl',
+	standalone: true,
+	imports: [],
+	templateUrl: './imperative-component.component.html',
 })
 export class ImperativeComponentComponent {
 	public dataService: DataService = inject(DataService);
-	public todos: WritableSignal<Array<Todo>> = signal([]);
-	public isAdmin: WritableSignal<boolean> = signal(false);
+	public items: WritableSignal<Array<Item>> = signal([]);
+	public isAdmin: boolean = false;
 	public textFilter: WritableSignal<string> = signal('');
 
 	constructor() {
 		this.dataService.getUserData$().subscribe(
 			user => {
-				if(user.isAdmin){
-					this.isAdmin.set(true);
+				if (user.isAdmin) {
+					this.isAdmin = true;
 				}
 			}
 		)
 		this.fetchData();
 	}
 
-	public updateTextFilter(textFilter: string): void{
+	public updateTextFilter(textFilter: string): void {
 		this.textFilter.set(textFilter);
 		this.fetchData();
 	}
 
-	public async fetchData(): Promise<void>{
-		let todos;
-		if(this.isAdmin()){
-			if(this.textFilter){
-				todos = await firstValueFrom(this.dataService.getData$(this.textFilter()));
-			}else{
+	public async fetchData(){
+		if (this.isAdmin) {
+			if (this.textFilter) {
+				this.dataService.getData$(this.textFilter()).subscribe(data => {
+					this.items.set(data ?? []);
+				})
+			} else {
 				// optional throw error
 			}
-		}else{
-			todos = await firstValueFrom(this.dataService.getData$());
+		} else {
+			this.dataService.getData$().subscribe(
+				data => {
+					this.items.set(data ?? []);
+				}
+			)
 		}
-		this.todos.set(todos??[]);
 	}
-
 
 
 }
